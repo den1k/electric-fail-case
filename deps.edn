@@ -1,0 +1,55 @@
+{:paths ["src" "resources"]
+ :deps  {org.clojure/clojure            {:mvn/version "1.11.1"}
+         org.clojure/clojurescript      {:mvn/version "1.11.60"}
+         com.google.javascript/closure-compiler-unshaded
+         {:mvn/version "v20230206"}
+
+         stuffs/stuffs                  {:git/url "https://github.com/den1k/stuffs"
+                                         :sha     "6e8c6f727b8b50409ba016e810bd63b6391e9dc6"}
+
+         http-kit/http-kit              {:mvn/version "2.6.0"}
+         ring/ring-core                 {:mvn/version "1.9.6"}
+         ring-oauth2/ring-oauth2        {:mvn/version "0.2.0"}
+         ring-basic-authentication/ring-basic-authentication
+         {:mvn/version "1.1.1"}
+         ring/ring-defaults             {:mvn/version "0.3.4"}
+         metosin/reitit                 {:mvn/version "0.5.18"}
+
+
+         com.hyperfiddle/electric       {:git/url "https://github.com/hyperfiddle/electric"
+                                         :sha     "961835d33a481c4768ece5390b68d81c2debd180"}
+         ch.qos.logback/logback-classic {:mvn/version "1.4.5"}
+         thi.ng/geom                    {:mvn/version "1.0.0"}
+
+         }
+ :aliases
+ {:run-m {:main-opts ["-m" "lumber.serve"]}
+  :run-x {:ns-default lumber.dash
+          :exec-fn    greet
+          :exec-args  {:name "Clojure"}}
+  :dev   {:extra-paths   ["dev"]
+          :override-deps {#_#_stuffs/stuffs {:local/root "../../clojure/stuffs"}
+                          ;com.hyperfiddle/photon {:local/root "../photon"}
+                          }
+          :extra-deps    {thheller/shadow-cljs {:mvn/version "2.20.20"}
+                          binaryage/devtools   {:mvn/version "1.0.6"}}
+          }
+  #_#_:shadow-cljs
+          {:extra-deps {thheller/shadow-cljs {:mvn/version "2.20.20"}}
+           :main-opts  ["-m" "shadow.cljs.devtools.cli"]
+           ;; deeper stack for shadow-cljs w/ photon compilation
+           :jvm-opts   ["-Xss3m"]}
+  :dev/cljs
+  {:extra-deps
+   {thheller/shadow-cljs {:mvn/version "2.20.20"}
+    binaryage/devtools   {:mvn/version "1.0.6"}}}
+  :build {:deps       {io.github.seancorfield/build-clj
+                       {:git/tag   "v0.9.2" :git/sha "9c9f078"
+                        ;; since we're building an app uberjar, we do not
+                        ;; need deps-deploy for clojars.org deployment:
+                        :deps/root "slim"}}
+          :ns-default build}
+  :test  {:extra-paths ["test"]
+          :extra-deps  {org.clojure/test.check {:mvn/version "1.1.1"}
+                        io.github.cognitect-labs/test-runner
+                        {:git/tag "v0.5.1" :git/sha "dfb30dd"}}}}}
